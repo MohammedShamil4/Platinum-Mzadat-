@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - E-commerce Orders</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .tabs { display: flex; gap: 20px; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; background-color: #eee; border-radius: 5px; text-decoration: none; color: black; font-weight: bold; }
+        .tab:hover { background-color: #ddd; }
+    </style>
+</head>
+<body>
+
+<h1>Welcome to E-commerce Orders</h1>
+
+<div class="tabs">
+    <a href="{% url 'add_saleitem' %}" class="tab">Add Sale Item</a>
+    <a href="{% url 'list_saleitems' %}" class="tab">List Sale Items</a>
+    <a href="{% url 'create_order' %}" class="tab">Create Order</a>
+    <a href="{% url 'list_orders' %}" class="tab">List Orders</a>
+</div>
+
+<p>Select an option above to manage Sale Items or Orders.</p>
+
+</body>
+</html>

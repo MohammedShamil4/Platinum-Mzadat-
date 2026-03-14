@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Order</title>
+    <style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:30px;
+}
+
+h2{
+    color:#333;
+}
+
+h3{
+    margin-top:25px;
+    color:#444;
+}
+
+form{
+    background:white;
+    padding:25px;
+    border-radius:6px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+label{
+    font-weight:bold;
+}
+
+input, select{
+    padding:6px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    width:150px;
+}
+
+table{
+    border-collapse:collapse;
+    width:100%;
+    margin-top:10px;
+    background:white;
+}
+
+th{
+    background:#2c3e50;
+    color:white;
+    padding:10px;
+}
+
+td{
+    border-bottom:1px solid #ddd;
+    padding:10px;
+}
+
+tr:nth-child(even){
+    background:#f2f2f2;
+}
+
+tr:hover{
+    background:#eef5ff;
+}
+
+button{
+    padding:8px 16px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+#add-row{
+    background:#3498db;
+    color:white;
+}
+
+#add-row:hover{
+    background:#2980b9;
+}
+
+button[type="submit"]{
+    background:#27ae60;
+    color:white;
+}
+
+button[type="submit"]:hover{
+    background:#1e874b;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Create Order</h2>
+
+<br>
+<div class="tabs">
+    <a href="{% url 'home' %}" class="tab"><h3>HOME</h3></a>
+</div>
+ <br>
+
+<form method="post" id="order-form">
+{% csrf_token %}
+
+
+
+<label>Order Discount (applies to whole order):</label>
+<input type="number" step="0.01" name="order_discount" id="id_order_discount" value="0">
+<p>if value is provided for whole order then, each item specify discount value will be disabled</p>
+<br><br>
+
+<h3>Order Items</h3>
+
+{{ formset.management_form }}
+
+<table id="order-table">
+<tr>
+<th>Sale Item</th>
+<th>Quantity</th>
+<th>Item Discount</th>
+<th>Delete</th>
+</tr>
+
+{% for form in formset %}
+<tr class="order-row">
+<td>{{ form.sale_item }}</td>
+<td>{{ form.quantity }}</td>
+<td class="item-discount-cell">{{ form.item_discount }}</td>
+<td>{{ form.DELETE }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<button type="button" id="add-row">Add Item</button>
+<br><br>
+
+<button type="submit">Save Order</button>
+
+</form>
+
+
+<script>
+
+const orderDiscountInput = document.getElementById("id_order_discount");
+const totalForms = document.getElementById("id_orderitem_set-TOTAL_FORMS");
+const table = document.getElementById("order-table");
+
+
+// ADD NEW ROW
+document.getElementById("add-row").onclick = function(){
+
+    let formCount = parseInt(totalForms.value);
+
+    let firstRow = document.querySelector(".order-row");
+    let newRow = firstRow.cloneNode(true);
+
+    newRow.querySelectorAll("input,select").forEach(el=>{
+
+        if(el.name){
+            el.name = el.name.replace("-0-","-"+formCount+"-");
+            el.id = el.id.replace("-0-","-"+formCount+"-");
+        }
+
+        if(el.type=="checkbox"){
+            el.checked=false;
+        }else{
+            el.value="";
+        }
+
+    });
+
+    table.appendChild(newRow);
+
+    totalForms.value = formCount+1;
+
+    toggleItemDiscounts();
+}
+
+
+// DISABLE ITEM DISCOUNT IF ORDER DISCOUNT EXISTS
+function toggleItemDiscounts(){
+
+    let discount = parseFloat(orderDiscountInput.value) || 0;
+
+    let itemDiscountInputs = document.querySelectorAll(".item-discount-cell input");
+
+    itemDiscountInputs.forEach(input=>{
+
+        if(discount>0){
+
+            input.value=0;
+            input.readOnly=true;
+
+        }
+        else{
+
+            input.readOnly=false;
+
+        }
+
+    });
+
+}
+
+orderDiscountInput.addEventListener("input",toggleItemDiscounts);
+
+toggleItemDiscounts();
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Orders</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background:#f4f6f9;
+            margin:0;
+            padding:20px;
+        }
+
+        h1{
+            text-align:center;
+            color:#333;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th{
+            background:#2c3e50;
+            color:white;
+            padding:10px;
+        }
+
+        td{
+            padding:10px;
+            border-bottom:1px solid #ddd;
+        }
+
+        tr:nth-child(even){
+            background:#f2f2f2;
+        }
+
+        tr:hover{
+            background:#e6f2ff;
+        }
+
+        a{
+            color:#007bff;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        a:hover{
+            text-decoration:underline;
+        }
+
+        .back{
+            display:inline-block;
+            margin-top:15px;
+            padding:8px 15px;
+            background:#2c3e50;
+            color:white;
+            border-radius:4px;
+        }
+
+        .back:hover{
+            background:#1a252f;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1>All Orders</h1>
+
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Total</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+        <td>{{ order.updated_at|date:"Y-m-d H:i" }}</td>
+        <td>{{ order.order_total }}</td>
+        <td>
+            <a href="{% url 'order_detail' order.id %}">View Items</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No orders created yet.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <a class="back" href="{% url 'home' %}">Back to Home</a>
+</p>
+
+</body>
+</html>

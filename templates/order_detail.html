@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order #{{ order.id }}</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:30px;
+}
+
+h1{
+    color:#333;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    background:white;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+th{
+    background:#2c3e50;
+    color:white;
+    padding:10px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+tr:nth-child(even){
+    background:#f2f2f2;
+}
+
+tr:hover{
+    background:#eef5ff;
+}
+
+.summary{
+    margin-top:20px;
+    background:white;
+    padding:15px;
+    border-radius:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.summary ul{
+    list-style:none;
+    padding:0;
+}
+
+.summary li{
+    padding:6px 0;
+    font-weight:bold;
+    color:#444;
+}
+
+a{
+    text-decoration:none;
+    color:white;
+    background:#3498db;
+    padding:8px 14px;
+    border-radius:4px;
+    margin-right:10px;
+}
+
+a:hover{
+    background:#2980b9;
+}
+
+.links{
+    margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Order #{{ order.id }}</h1>
+
+<table>
+<tr>
+<th>Item</th>
+<th>Rate</th>
+<th>Quantity</th>
+<th>Item Discount</th>
+<th>Tax</th>
+<th>Total</th>
+</tr>
+
+{% for item in order.items %}
+<tr>
+<td>{{ item.sale_item.name }}</td>
+<td>{{ item.sale_item.rate }}</td>
+<td>{{ item.quantity }}</td>
+<td>{{ item.item_discount }}</td>
+<td>{{ item.tax_amount }}</td>
+<td>{{ item.total_price }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<div class="summary">
+<h3>Summary</h3>
+
+<ul>
+<li>Order Item Discount Total: {{ order.order_item_discount_total }}</li>
+<li>Order Tax Total: {{ order.order_tax_total }}</li>
+<li>Order Discount Total: {{ order.order_discount_total }}</li>
+<li>Order Total: {{ order.order_total }}</li>
+</ul>
+
+</div>
+
+<div class="links">
+<a href="{% url 'create_order' %}">Create New Order</a>
+<a href="{% url 'home' %}">Back to Home</a>
+</div>
+
+</body>
+</html>
